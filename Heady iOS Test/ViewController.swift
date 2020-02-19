@@ -11,10 +11,14 @@ import TMDBSwift
 
 class ViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UISearchBarDelegate{
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var popularButton: UIButton!
+    @IBOutlet weak var latestButton: UIButton!
+    @IBOutlet weak var allButton: UIButton!
     
     let apiKey = "37f8d30f3fe0566faa70e400f371cab7"
     var movies = [Result]()
     var moviesToPresent = [Result]()
+    var sortedMovies = [Result]()
     var searchingMovies = false
     var page = 1
     var lastContentOffSet = 0
@@ -34,23 +38,68 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
         searchBar.delegate = self
         registerCollectionView()
         getData(pageNumber: page)
+        setButtonLayer()
+        
     }
-//    func makeTapGesture()
-//    {
-//        let tap = UITapGestureRecognizer(target: self, action: #selector(screentapped))
-//        self.view.addGestureRecognizer(tap)
-//    }
-//
-//    @objc func screentapped(_ sender: UITapGestureRecognizer)
-//    {
-//        searchBar.endEditing(true)
-//
-//    }
     
-//    override class func clearTextInputContextIdentifier(_ identifier: String) {
-//        print("adadsndbb :\(identifier)")
-//    }
+    func setButtonLayer()
+    {
+        allButton.layer.cornerRadius = 2
+        allButton.clipsToBounds = true
+        //allButton.isEnabled = true
+        allButton.backgroundColor = .gray
+        allButton.setTitleColor(.white, for: .normal)
+        
+        popularButton.layer.cornerRadius = 2
+        popularButton.clipsToBounds = true
+        popularButton.backgroundColor = .gray
+        popularButton.setTitleColor(.white, for: .normal)
+        //popularButton.isEnabled = false
+        
+        latestButton.layer.cornerRadius = 2
+        latestButton.clipsToBounds = true
+        latestButton.backgroundColor = .gray
+        latestButton.setTitleColor(.white, for: .normal)
+        //latestButton.isEnabled = false
+    }
+
+    @IBAction func popularButtonPressed(_ sender: Any) {
+        sortType = "popularity_desc"
+        popularButton.backgroundColor = .white
+        popularButton.setTitleColor(.black, for: .normal)
+        
+        allButton.backgroundColor = .gray
+        allButton.setTitleColor(.white, for: .normal)
+        latestButton.backgroundColor = .gray
+        latestButton.setTitleColor(.white, for: .normal)
+        getSortedData()
+    }
     
+    @IBAction func latestButtonPressed(_ sender: Any) {
+        
+        sortType = "primary_release_date_desc"
+        allButton.backgroundColor = .gray
+        allButton.setTitleColor(.white, for: .normal)
+        
+        latestButton.backgroundColor = .white
+        latestButton.setTitleColor(.black, for: .normal)
+        
+        popularButton.backgroundColor = .gray
+        popularButton.setTitleColor(.white, for: .normal)
+        getSortedData()
+        
+    }
+    @IBAction func allButtonPressed(_ sender: Any) {
+        sortType = ""
+        allButton.backgroundColor = .white
+        allButton.setTitleColor(.black, for: .normal)
+        latestButton.backgroundColor = .gray
+        latestButton.setTitleColor(.white, for: .normal)
+        popularButton.backgroundColor = .gray
+        popularButton.setTitleColor(.white, for: .normal)
+        getSortedData()
+        
+    }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
         guard let text = searchBar.text else {return}
@@ -122,6 +171,45 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(UINib(nibName: "MoviesCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: MoviesCollectionViewCell.reuseIdentifier)
+    }
+    
+    func getSortedData()
+    {
+            TMDBConfig.apikey = apiKey
+            var params = [DiscoverParam]()
+            if sortType != ""
+            {
+                switch sortType {
+                case "popularity_desc":
+                    params.append(DiscoverParam.sort_by(DiscoverSortByMovie.popularity_desc.rawValue))
+                case "primary_release_date_desc":
+                    params.append(DiscoverParam.sort_by(DiscoverSortByMovie.primary_release_date_desc.rawValue))
+                default:
+                    print("no filter")
+                }
+            }
+            print("params :\(params)")
+            DiscoverMovieMDB.discoverMovies(params: params, completion: { (data, movieArr) in
+                do
+                {
+                    guard let jsonData = try data.json?.rawData() else {
+                        return}
+                    let decoder = JSONDecoder()
+                    let decodeRespone = try decoder.decode(MoviesDataResponse.self, from: jsonData)
+                    guard let movie = decodeRespone.results else {
+                        return}
+                    self.sortedMovies = movie
+                    self.moviesToPresent.removeAll()
+                    self.moviesToPresent = self.sortedMovies
+                    self.collectionView.reloadData()
+                    
+                }
+                catch
+                {
+                    print(error.localizedDescription)
+                }
+                
+            })
     }
     
     func getData(pageNumber: Int)
