@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -19,7 +20,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="pm4-0S-bLp">
-                                        <rect key="frame" x="20" y="150" width="374" height="712"/>
+                                        <rect key="frame" x="20" y="195" width="374" height="667"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="20" minimumInteritemSpacing="10" id="9oJ-j6-I32">
                                             <size key="itemSize" width="150" height="200"/>
@@ -48,10 +49,47 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="F8y-xe-6JM">
+                                        <rect key="frame" x="49" y="155" width="316" height="30"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iqw-2V-SFZ">
+                                                <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="100" id="Nqz-3D-X0b"/>
+                                                </constraints>
+                                                <color key="tintColor" red="0.035294117649999998" green="0.062745098040000002" blue="0.14117647059999999" alpha="0.96786971830000001" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <state key="normal" title="Popular"/>
+                                                <connections>
+                                                    <action selector="popularButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="uOD-q2-od9"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tkt-cq-qdx">
+                                                <rect key="frame" x="108" y="0.0" width="100" height="30"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="tintColor" red="0.035294117649999998" green="0.062745098040000002" blue="0.14117647059999999" alpha="0.96786971830000001" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <state key="normal" title="Latest"/>
+                                                <connections>
+                                                    <action selector="latestButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="LUj-YA-HUN"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WtU-tz-fes">
+                                                <rect key="frame" x="216" y="0.0" width="100" height="30"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="tintColor" red="0.035294117649999998" green="0.062745098040000002" blue="0.14117647059999999" alpha="0.96786971830000001" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                <state key="normal" title="All"/>
+                                                <connections>
+                                                    <action selector="allButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="F7p-b1-qYW"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
-                                    <constraint firstItem="pm4-0S-bLp" firstAttribute="top" secondItem="Pgw-DE-Mvs" secondAttribute="bottom" constant="10" id="3Bm-LE-IGZ"/>
+                                    <constraint firstItem="F8y-xe-6JM" firstAttribute="top" secondItem="Pgw-DE-Mvs" secondAttribute="bottom" constant="15" id="39Q-go-GWC"/>
+                                    <constraint firstItem="F8y-xe-6JM" firstAttribute="centerX" secondItem="cdK-tM-GHd" secondAttribute="centerX" id="EOE-us-7IG"/>
+                                    <constraint firstItem="pm4-0S-bLp" firstAttribute="top" secondItem="F8y-xe-6JM" secondAttribute="bottom" constant="10" id="X9r-Rh-qf6"/>
                                     <constraint firstItem="Pgw-DE-Mvs" firstAttribute="top" secondItem="EkS-fP-dBb" secondAttribute="bottom" constant="10" id="Yyn-vu-LfA"/>
                                     <constraint firstItem="Pgw-DE-Mvs" firstAttribute="leading" secondItem="cdK-tM-GHd" secondAttribute="leading" constant="8" id="bFC-Xo-dAQ"/>
                                     <constraint firstItem="EkS-fP-dBb" firstAttribute="top" secondItem="cdK-tM-GHd" secondAttribute="top" constant="52" id="gKb-Xd-CIf"/>
@@ -88,7 +126,10 @@
                     </view>
                     <navigationItem key="navigationItem" id="Sat-OC-CmV"/>
                     <connections>
+                        <outlet property="allButton" destination="WtU-tz-fes" id="hk7-W7-iJw"/>
                         <outlet property="collectionView" destination="pm4-0S-bLp" id="Ytf-Be-5O6"/>
+                        <outlet property="latestButton" destination="tkt-cq-qdx" id="Dm8-rJ-aer"/>
+                        <outlet property="popularButton" destination="Iqw-2V-SFZ" id="Eap-ku-bJS"/>
                         <outlet property="searchBar" destination="Pgw-DE-Mvs" id="YQv-7o-8yf"/>
                     </connections>
                 </viewController>
